@@ -1,9 +1,10 @@
 from aws_cdk import (
-    # Duration,
+    Duration,
     Stack,
-    # aws_sqs as sqs,
+    aws_sqs as sqs,
 )
 from constructs import Construct
+
 
 class ExpCdkNibbleStack(Stack):
 
@@ -13,7 +14,7 @@ class ExpCdkNibbleStack(Stack):
         # The code that defines your stack goes here
 
         # example resource
-        # queue = sqs.Queue(
-        #     self, "ExpCdkNibbleQueue",
-        #     visibility_timeout=Duration.seconds(300),
-        # )
+        queue = sqs.Queue(
+            self, "ExpCdkNibbleQueue",
+            visibility_timeout=Duration.seconds(300),
+        )
