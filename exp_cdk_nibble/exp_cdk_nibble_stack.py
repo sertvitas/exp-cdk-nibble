@@ -1,5 +1,4 @@
 from aws_cdk import (
-    Duration,
     Stack,
     aws_ec2 as ec2,
 )
@@ -15,15 +14,15 @@ class ExpCdkNibbleStack(Stack):
             cidr="10.0.0.0/16",
             subnet_configuration=[
                 ec2.SubnetConfiguration(
-                    name=f"hybrid_cts_{self.environment_id}_public",
+                    name="nibble_public",
                     subnet_type=ec2.SubnetType.PUBLIC,
                 ),
                 ec2.SubnetConfiguration(
-                    name=f"hybrid_cts_{self.environment_id}_private",
+                    name="nibble_private",
                     subnet_type=ec2.SubnetType.PRIVATE_WITH_NAT,
                 ),
                 ec2.SubnetConfiguration(
-                    name=f"hybrid_cts_{self.environment_id}_isolated",
+                    name="nibble_isolated",
                     subnet_type=ec2.SubnetType.PRIVATE_ISOLATED,
                 ),
             ],
