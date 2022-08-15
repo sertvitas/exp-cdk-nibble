@@ -13,5 +13,3 @@ class ExpCdkNibbleStack(Stack):
         vpc = ec2.Vpc(self, "TheVPC",
                       cidr="10.0.0.0/16"
                       )
- = ec2.Vpc(self, "TheVPC",
-                      cidr="10.0.0.0/16"
