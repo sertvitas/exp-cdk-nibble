@@ -39,9 +39,9 @@ class ExpCdkNibbleStack(Stack):
             "SSM_MESSAGES",
             service=ec2.InterfaceVpcEndpointAwsService.SSM_MESSAGES,
         )
-        vpc.add_interface_endpoint(
-            "S3", service=ec2.InterfaceVpcEndpointAwsService.S3
-        )
+        # vpc.add_interface_endpoint(
+        #     "S3", service=ec2.InterfaceVpcEndpointAwsService.S3
+        # )
 
         ec2_optimized_ami = ecs.EcsOptimizedImage.amazon_linux2()
         role = iam.Role(
