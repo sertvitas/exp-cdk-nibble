@@ -25,6 +25,24 @@ class ExpCdkNibbleStack(Stack):
             ],
         )
 
+        vpc.add_interface_endpoint(
+            "EC2", service=ec2.InterfaceVpcEndpointAwsService.EC2
+        )
+        vpc.add_interface_endpoint(
+            "EC2_MESSAGES",
+            service=ec2.InterfaceVpcEndpointAwsService.EC2_MESSAGES,
+        )
+        vpc.add_interface_endpoint(
+            "SSM", service=ec2.InterfaceVpcEndpointAwsService.SSM
+        )
+        vpc.add_interface_endpoint(
+            "SSM_MESSAGES",
+            service=ec2.InterfaceVpcEndpointAwsService.SSM_MESSAGES,
+        )
+        vpc.add_interface_endpoint(
+            "S3", service=ec2.InterfaceVpcEndpointAwsService.S3
+        )
+
         ec2_optimized_ami = ecs.EcsOptimizedImage.amazon_linux2()
         role = iam.Role(
             self,
@@ -43,7 +61,7 @@ class ExpCdkNibbleStack(Stack):
             machine_image=ec2_optimized_ami,
             vpc=vpc,
             vpc_subnets=ec2.SubnetSelection(
-                subnet_type=ec2.SubnetType.PRIVATE_WITH_NAT
+                subnet_type=ec2.SubnetType.PRIVATE_ISOLATED
             ),
             role=role,
         )
