@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
-import os
 
 import aws_cdk as cdk
 
-from exp_cdk_nibble.exp_cdk_nibble_stack import ExpCdkNibbleStack
+from exp_cdk_nibble.connectivity import ExpCdkNibbleStack
 
 
 app = cdk.App()
