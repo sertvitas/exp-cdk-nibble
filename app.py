@@ -3,6 +3,9 @@
 import aws_cdk as cdk
 
 from exp_cdk_nibble.connectivity import ExpCdkNibbleStack
+from exp_cdk_nibble.rds import RdsStack
+
+#default_env = cdk.Environment(account=AWS_ACCOUNT_NUMBER, region=DEFAULT_REGION)
 
 
 app = cdk.App()
@@ -23,5 +26,6 @@ ExpCdkNibbleStack(app, "ExpCdkNibbleStack",
 
     # For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html
     )
-
+RdsStack(app, "RdsStack",
+         )
 app.synth()
