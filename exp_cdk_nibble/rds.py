@@ -13,12 +13,16 @@ class RdsStack(Stack):
         self, scope: Construct, construct_id: str, target_vpc, **kwargs
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
-        my_secret = sm.Secret(self, "Secret",
+        my_secret = sm.Secret(
+            self,
+            "Secret",
             generate_secret_string=sm.SecretStringGenerator(
-        secret_string_template=json.dumps({"username": "postgres"}, separators=(',', ':')),
-        generate_string_key="password"
-    )
-)   
+                secret_string_template=json.dumps(
+                    {"username": "postgres"}, separators=(",", ":")
+                ),
+                generate_string_key="password",
+            ),
+        )
         instance1 = rds.DatabaseInstance(
             self,
             "PostgresInstance1",
