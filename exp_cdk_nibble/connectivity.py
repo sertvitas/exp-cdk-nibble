@@ -1,11 +1,16 @@
-from aws_cdk import Stack, aws_ec2 as ec2, aws_ecs as ecs, aws_iam as iam
+from aws_cdk import (
+    Stack,
+    aws_ec2 as ec2,
+    aws_ecs as ecs,
+    aws_iam as iam,
+)
 from constructs import Construct
 
 
 class ExpCdkNibbleStack(Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
-        vpc = ec2.Vpc(
+        self.vpc = ec2.Vpc(
             self,
             "TheVPC",
             cidr="10.0.0.0/16",
@@ -25,17 +30,17 @@ class ExpCdkNibbleStack(Stack):
             ],
         )
 
-        vpc.add_interface_endpoint(
+        self.vpc.add_interface_endpoint(
             "EC2", service=ec2.InterfaceVpcEndpointAwsService.EC2
         )
-        vpc.add_interface_endpoint(
+        self.vpc.add_interface_endpoint(
             "EC2_MESSAGES",
             service=ec2.InterfaceVpcEndpointAwsService.EC2_MESSAGES,
         )
-        vpc.add_interface_endpoint(
+        self.vpc.add_interface_endpoint(
             "SSM", service=ec2.InterfaceVpcEndpointAwsService.SSM
         )
-        vpc.add_interface_endpoint(
+        self.vpc.add_interface_endpoint(
             "SSM_MESSAGES",
             service=ec2.InterfaceVpcEndpointAwsService.SSM_MESSAGES,
         )
@@ -59,7 +64,7 @@ class ExpCdkNibbleStack(Stack):
             "Instance",
             instance_type=ec2.InstanceType("t3.nano"),
             machine_image=ec2_optimized_ami,
-            vpc=vpc,
+            vpc=self.vpc,
             vpc_subnets=ec2.SubnetSelection(
                 subnet_type=ec2.SubnetType.PRIVATE_ISOLATED
             ),
