@@ -21,6 +21,7 @@ class RdsStack(Stack):
                     {"username": "postgres"}, separators=(",", ":")
                 ),
                 generate_string_key="password",
+                exclude_punctuation=True
             ),
         )
         instance1 = rds.DatabaseInstance(
@@ -29,6 +30,25 @@ class RdsStack(Stack):
             engine=rds.DatabaseInstanceEngine.POSTGRES,
             credentials=rds.Credentials.from_secret(my_secret),
             vpc=target_vpc,
+            allocated_storage=100,
+            allow_major_version_upgrade=False,
+            auto_minor_version_upgrade=False,
+            instance_type=ec2.InstanceType.of(
+                ec2.InstanceClass.T3, ec2.InstanceSize.SMALL
+            ),
+            # backup_retention=,
+            copy_tags_to_snapshot=True,
+            deletion_protection=False,
+            enable_performance_insights=True,
+            multi_az=True,
+            # parameter_group=,
+            # preferred_backup_window=,
+            # preferred_maintenance_window=,
+            # removal_policy=,
+            # storage_type=,
+            vpc_subnets=ec2.SubnetSelection(
+                subnet_type=ec2.SubnetType.PRIVATE_ISOLATED
+            ),
         )
         sm.SecretRotation(
             self,
@@ -38,5 +58,5 @@ class RdsStack(Stack):
             secret=my_secret,
             target=instance1,  # a Connectable
             vpc=target_vpc,  # The VPC where the secret rotation application will be deployed
-            exclude_characters=" %+:;{}",
+            exclude_characters=" %+:;\{\}'\"\,@\\",
         )
