@@ -1,3 +1,4 @@
+import json
 from aws_cdk import (
     Stack,
     aws_secretsmanager as sm,
@@ -14,7 +15,7 @@ class RdsStack(Stack):
         super().__init__(scope, construct_id, **kwargs)
         my_secret = sm.Secret(self, "Secret",
             generate_secret_string=sm.SecretStringGenerator(
-        secret_string_template=JSON.stringify({"username": "postgres"}),
+        secret_string_template=json.dumps({"username": "postgres"}, separators=(',', ':')),
         generate_string_key="password"
     )
 )   
