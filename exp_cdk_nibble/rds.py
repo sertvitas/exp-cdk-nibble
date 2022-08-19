@@ -10,7 +10,7 @@ from constructs import Construct
 
 class RdsStack(Stack):
     def __init__(
-        self, scope: Construct, construct_id: str, target_vpc, **kwargs
+            self, scope: Construct, construct_id: str, target_vpc, **kwargs
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
         my_secret = sm.Secret(
@@ -24,10 +24,24 @@ class RdsStack(Stack):
                 exclude_punctuation=True
             ),
         )
+        engine = rds.DatabaseInstanceEngine.postgres(version=rds.PostgresEngineVersion.VER_13_5)
+        parameter_group = rds.ParameterGroup(
+            self,
+            "ParameterGroup",
+            engine=engine,
+            parameters={
+                "rds.logical_replication": "1",
+                "autovacuum_naptime": "40",
+                "rds.allowed_extensions": "dblink, hstore, pg_stat_statements",
+                "wal_sender_timeout": "0",
+                "shared_preload_libraries": "pg_stat_statements"
+            }
+        )
         instance1 = rds.DatabaseInstance(
             self,
             "PostgresInstance1",
-            engine=rds.DatabaseInstanceEngine.POSTGRES,
+            engine=engine,
+            parameter_group = parameter_group,
             credentials=rds.Credentials.from_secret(my_secret),
             vpc=target_vpc,
             allocated_storage=100,
