@@ -24,7 +24,12 @@ class Rds11Stack(Stack):
                 exclude_punctuation=True
             ),
         )
-        engine = rds.DatabaseInstanceEngine.postgres(version=rds.PostgresEngineVersion.VER_11_13)
+        # This command uses version checking against a table of "valid" versions.
+        # engine = rds.DatabaseInstanceEngine.postgres(version=rds.PostgresEngineVersion.VER_11_13)
+
+        # PostgresEngineVersion.of allows arbitrary versions without validity checking.
+        # Requires ('<full_version>','<major_version>')
+        engine = rds.DatabaseInstanceEngine.postgres(version=rds.PostgresEngineVersion.of('11.13', '11'))
         parameter_group = rds.ParameterGroup(
             self,
             "ParameterGroup",
@@ -33,7 +38,7 @@ class Rds11Stack(Stack):
                 "rds.logical_replication": "1",
                 "autovacuum_naptime": "40",
                 # rds.allowed_extensions requires ver 12.6+ only.
-                #"rds.allowed_extensions": "dblink, hstore, pg_stat_statements",
+                # rds.allowed_extensions": "dblink, hstore, pg_stat_statements",
                 "wal_sender_timeout": "0",
                 "shared_preload_libraries": "pg_stat_statements"
             }
@@ -42,7 +47,7 @@ class Rds11Stack(Stack):
             self,
             "PostgresInstance1",
             engine=engine,
-            parameter_group = parameter_group,
+            parameter_group=parameter_group,
             credentials=rds.Credentials.from_secret(my_secret),
             vpc=target_vpc,
             allocated_storage=100,
