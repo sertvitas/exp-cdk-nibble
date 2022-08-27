@@ -10,7 +10,7 @@ from constructs import Construct
 
 class Rds11Stack(Stack):
     def __init__(
-            self, scope: Construct, construct_id: str, target_vpc, **kwargs
+        self, scope: Construct, construct_id: str, target_vpc, **kwargs
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
         my_secret = sm.Secret(
@@ -21,7 +21,7 @@ class Rds11Stack(Stack):
                     {"username": "postgres"}, separators=(",", ":")
                 ),
                 generate_string_key="password",
-                exclude_punctuation=True
+                exclude_punctuation=True,
             ),
         )
         # This command uses version checking against a table of "valid" versions.
@@ -29,7 +29,9 @@ class Rds11Stack(Stack):
 
         # PostgresEngineVersion.of allows arbitrary versions without validity checking.
         # Requires ('<full_version>','<major_version>')
-        engine = rds.DatabaseInstanceEngine.postgres(version=rds.PostgresEngineVersion.of('11.13', '11'))
+        engine = rds.DatabaseInstanceEngine.postgres(
+            version=rds.PostgresEngineVersion.of("11.13", "11")
+        )
         parameter_group = rds.ParameterGroup(
             self,
             "ParameterGroup",
@@ -40,8 +42,8 @@ class Rds11Stack(Stack):
                 # rds.allowed_extensions requires ver 12.6+ only.
                 # rds.allowed_extensions": "dblink, hstore, pg_stat_statements",
                 "wal_sender_timeout": "0",
-                "shared_preload_libraries": "pg_stat_statements"
-            }
+                "shared_preload_libraries": "pg_stat_statements",
+            },
         )
         instance1 = rds.DatabaseInstance(
             self,
