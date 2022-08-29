@@ -1,3 +1,4 @@
+"""Creating and RDS stack on Postgres11 for upgrade testing"""
 import json
 from aws_cdk import (
     Stack,
@@ -9,6 +10,7 @@ from constructs import Construct
 
 
 class Rds11Stack(Stack):
+    """Constructing the stack"""
     def __init__(
             self, scope: Construct, construct_id: str, target_vpc, **kwargs
     ) -> None:
@@ -25,11 +27,15 @@ class Rds11Stack(Stack):
             ),
         )
         # This command uses version checking against a table of "valid" versions.
-        # engine = rds.DatabaseInstanceEngine.postgres(version=rds.PostgresEngineVersion.VER_11_13)
+        # engine = rds.DatabaseInstanceEngine.postgres(
+        #    version=rds.PostgresEngineVersion.VER_11_13
+        # )
 
         # PostgresEngineVersion.of allows arbitrary versions without validity checking.
         # Requires ('<full_version>','<major_version>')
-        engine = rds.DatabaseInstanceEngine.postgres(version=rds.PostgresEngineVersion.of('11.13', '11'))
+        engine = rds.DatabaseInstanceEngine.postgres(
+            version=rds.PostgresEngineVersion.of('11.13', '11')
+        )
         parameter_group = rds.ParameterGroup(
             self,
             "ParameterGroup",
@@ -77,6 +83,6 @@ class Rds11Stack(Stack):
             # Postgres single user scheme
             secret=my_secret,
             target=instance1,  # a Connectable
-            vpc=target_vpc,  # The VPC where the secret rotation application will be deployed
+            vpc=target_vpc,  # The VPC for secret rotation
             exclude_characters=" %+:;\{\}'\"\,@\\",
         )

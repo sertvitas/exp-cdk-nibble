@@ -1,3 +1,4 @@
+"""Building an EC2 instance for testing"""
 from aws_cdk import (
     Stack,
     aws_ec2 as ec2,
@@ -8,6 +9,10 @@ from constructs import Construct
 
 
 class ExpEC2(Stack):
+
+
+    
+    """EC2 instance construction"""
     def __init__(
             self, scope: Construct, construct_id: str, target_vpc, **kwargs
     ) -> None:
@@ -24,7 +29,7 @@ class ExpEC2(Stack):
                 "AmazonSSMManagedInstanceCore"
             )
         )
-        instance = ec2.Instance(
+        self.instance = ec2.Instance(
             self,
             "Instance",
             instance_type=ec2.InstanceType("t3.nano"),

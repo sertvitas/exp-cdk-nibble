@@ -1,3 +1,4 @@
+"""Building an RDS deployment"""
 import json
 from aws_cdk import (
     Stack,
@@ -9,6 +10,7 @@ from constructs import Construct
 
 
 class RdsStack(Stack):
+    """Constructing the RDS stack"""
     def __init__(
             self, scope: Construct, construct_id: str, target_vpc, **kwargs
     ) -> None:
@@ -24,7 +26,9 @@ class RdsStack(Stack):
                 exclude_punctuation=True
             ),
         )
-        engine = rds.DatabaseInstanceEngine.postgres(version=rds.PostgresEngineVersion.VER_13_5)
+        engine = rds.DatabaseInstanceEngine.postgres(
+            version=rds.PostgresEngineVersion.VER_13_5
+        )
         parameter_group = rds.ParameterGroup(
             self,
             "ParameterGroup",
@@ -71,6 +75,6 @@ class RdsStack(Stack):
             # Postgres single user scheme
             secret=my_secret,
             target=instance1,  # a Connectable
-            vpc=target_vpc,  # The VPC where the secret rotation application will be deployed
+            vpc=target_vpc,  # The VPC for secret rotation
             exclude_characters=" %+:;\{\}'\"\,@\\",
         )

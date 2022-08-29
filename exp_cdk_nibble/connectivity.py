@@ -1,13 +1,15 @@
+"""Base VPC for testing CDK processes"""
+
 from aws_cdk import (
     Stack,
     aws_ec2 as ec2,
-    aws_ecs as ecs,
-    aws_iam as iam,
+    # aws_ecs as ecs,
+    # aws_iam as iam,
 )
 from constructs import Construct
 
-
 class ExpCdkNibbleStack(Stack):
+    """VPC construction"""
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
         self.vpc = ec2.Vpc(
