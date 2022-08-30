@@ -11,12 +11,15 @@ from constructs import Construct
 class ExpEC2(Stack):
 
 
-    
+
     """EC2 instance construction"""
     def __init__(
             self, scope: Construct, construct_id: str, target_vpc, **kwargs
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
+
+        with open("./userdata/puppers.sh", encoding="utf-8") as file:
+            user_data = file.read()
 
         ec2_optimized_ami = ecs.EcsOptimizedImage.amazon_linux2()
         role = iam.Role(
@@ -39,4 +42,5 @@ class ExpEC2(Stack):
                 subnet_type=ec2.SubnetType.PRIVATE_WITH_NAT
             ),
             role=role,
+            user_data=ec2.UserData.custom(user_data),
         )
