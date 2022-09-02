@@ -32,6 +32,11 @@ class ExpEC2(Stack):
                 "AmazonSSMManagedInstanceCore"
             )
         )
+        role.add_managed_policy(
+            iam.ManagedPolicy.from_aws_managed_policy_name(
+                "CloudWatchLogsFullAccess"
+            )
+        )
         self.instance = ec2.Instance(
             self,
             "Instance",
