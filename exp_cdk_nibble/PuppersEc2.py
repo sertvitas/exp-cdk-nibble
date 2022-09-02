@@ -8,7 +8,7 @@ from aws_cdk import (
 from constructs import Construct
 
 
-class ExpEC2(Stack):
+class PuppersEc2(Stack):
 
 
 

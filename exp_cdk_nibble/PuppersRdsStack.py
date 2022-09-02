@@ -9,7 +9,7 @@ from aws_cdk import (
 from constructs import Construct
 
 
-class Rds11Stack(Stack):
+class PuppersRdsStack(Stack):
     """Constructing the stack"""
     def __init__(
             self, scope: Construct, construct_id: str, target_vpc, **kwargs
