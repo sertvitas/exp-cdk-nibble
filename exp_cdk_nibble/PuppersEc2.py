@@ -4,18 +4,22 @@ from aws_cdk import (
     aws_ec2 as ec2,
     aws_ecs as ecs,
     aws_iam as iam,
-    aws_secretsmanager as sm
+    aws_secretsmanager as sm,
 )
 from constructs import Construct
 
 
 class PuppersEc2(Stack):
 
-
-
     """EC2 instance construction"""
+
     def __init__(
-            self, scope: Construct, construct_id: str, target_vpc, secret: sm.Secret, **kwargs
+        self,
+        scope: Construct,
+        construct_id: str,
+        target_vpc,
+        secret: sm.Secret,
+        **kwargs
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
@@ -42,31 +46,38 @@ class PuppersEc2(Stack):
             )
         )
         # permit puppers to access the RDS secret
-        role.add_to_policy(iam.PolicyStatement(
-            resources=[secret.secret_full_arn],
-            actions=[
-                "secretsmanager:GetResourcePolicy",
-                "secretsmanager:GetSecretValue",
-                "secretsmanager:DescribeSecret",
-                "secretsmanager:ListSecretVersionIds"])
+        role.add_to_policy(
+            iam.PolicyStatement(
+                resources=[secret.secret_full_arn],
+                actions=[
+                    "secretsmanager:GetResourcePolicy",
+                    "secretsmanager:GetSecretValue",
+                    "secretsmanager:DescribeSecret",
+                    "secretsmanager:ListSecretVersionIds",
+                ],
             )
-        role.add_to_policy(iam.PolicyStatement(
-            resources=["*"],
-            actions=[
-                "secretsmanager:ListSecrets"])
-            )
+        )
+        role.add_to_policy(
+            iam.PolicyStatement(resources=["*"], actions=["secretsmanager:ListSecrets"])
+        )
         # permit EC2 isntance to downlaod teh  commit builds of pupers from S3
-        role.add_to_policy(iam.PolicyStatement(
-            resources=[
-                "arn:aws:s3:::com.imprivata.709310380790.us-east-1.devops-artifacts",
-                "arn:aws:s3:::com.imprivata.709310380790.us-east-1.devops-artifacts/*",],
-            actions=["s3:ListBucket"])
+        role.add_to_policy(
+            iam.PolicyStatement(
+                resources=[
+                    "arn:aws:s3:::com.imprivata.709310380790.us-east-1.devops-artifacts",
+                    "arn:aws:s3:::com.imprivata.709310380790.us-east-1.devops-artifacts/*",
+                ],
+                actions=["s3:ListBucket"],
             )
-        role.add_to_policy(iam.PolicyStatement(
-            resources=["arn:aws:s3:::com.imprivata.709310380790.us-east-1.devops-artifacts/puppers/*"],
-            actions=[
-                "s3:GetObject"])
+        )
+        role.add_to_policy(
+            iam.PolicyStatement(
+                resources=[
+                    "arn:aws:s3:::com.imprivata.709310380790.us-east-1.devops-artifacts/puppers/*"
+                ],
+                actions=["s3:GetObject"],
             )
+        )
         self.instance = ec2.Instance(
             self,
             "Instance",
