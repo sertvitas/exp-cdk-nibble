@@ -62,6 +62,9 @@ class PuppersEc2(Stack):
         )
         # permit EC2 isntance to downlaod teh  commit builds of pupers from S3
         role.add_to_policy(
+            iam.PolicyStatement(resources=["*"], actions=["s3:ListAllMyBuckets"])
+        )
+        role.add_to_policy(
             iam.PolicyStatement(
                 resources=[
                     "arn:aws:s3:::com.imprivata.709310380790.us-east-1.devops-artifacts",
