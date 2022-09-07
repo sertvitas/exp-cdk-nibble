@@ -11,11 +11,12 @@ from constructs import Construct
 
 class PuppersRdsStack(Stack):
     """Constructing the stack"""
+
     def __init__(
-            self, scope: Construct, construct_id: str, target_vpc, **kwargs
+        self, scope: Construct, construct_id: str, target_vpc, **kwargs
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
-        my_secret = sm.Secret(
+        self.my_secret = sm.Secret(
             self,
             "Secret",
             generate_secret_string=sm.SecretStringGenerator(
@@ -23,7 +24,7 @@ class PuppersRdsStack(Stack):
                     {"username": "postgres"}, separators=(",", ":")
                 ),
                 generate_string_key="password",
-                exclude_punctuation=True
+                exclude_punctuation=True,
             ),
         )
         # This command uses version checking against a table of "valid" versions.
@@ -34,7 +35,7 @@ class PuppersRdsStack(Stack):
         # PostgresEngineVersion.of allows arbitrary versions without validity checking.
         # Requires ('<full_version>','<major_version>')
         engine = rds.DatabaseInstanceEngine.postgres(
-            version=rds.PostgresEngineVersion.of('11.13', '11')
+            version=rds.PostgresEngineVersion.of("11.13", "11")
         )
         parameter_group = rds.ParameterGroup(
             self,
@@ -46,15 +47,15 @@ class PuppersRdsStack(Stack):
                 # rds.allowed_extensions requires ver 12.6+ only.
                 # rds.allowed_extensions": "dblink, hstore, pg_stat_statements",
                 "wal_sender_timeout": "0",
-                "shared_preload_libraries": "pg_stat_statements"
-            }
+                "shared_preload_libraries": "pg_stat_statements",
+            },
         )
         instance1 = rds.DatabaseInstance(
             self,
             "PostgresInstance1",
             engine=engine,
             parameter_group=parameter_group,
-            credentials=rds.Credentials.from_secret(my_secret),
+            credentials=rds.Credentials.from_secret(self.my_secret),
             vpc=target_vpc,
             allocated_storage=100,
             allow_major_version_upgrade=False,
@@ -81,7 +82,7 @@ class PuppersRdsStack(Stack):
             "SecretRotation",
             application=sm.SecretRotationApplication.POSTGRES_ROTATION_SINGLE_USER,
             # Postgres single user scheme
-            secret=my_secret,
+            secret=self.my_secret,
             target=instance1,  # a Connectable
             vpc=target_vpc,  # The VPC for secret rotation
             exclude_characters=" %+:;\{\}'\"\,@\\",
