@@ -15,7 +15,7 @@ class PuppersRdsStack(Stack):
             self, scope: Construct, construct_id: str, target_vpc, **kwargs
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
-        my_secret = sm.Secret(
+        self.my_secret = sm.Secret(
             self,
             "Secret",
             generate_secret_string=sm.SecretStringGenerator(
@@ -54,7 +54,7 @@ class PuppersRdsStack(Stack):
             "PostgresInstance1",
             engine=engine,
             parameter_group=parameter_group,
-            credentials=rds.Credentials.from_secret(my_secret),
+            credentials=rds.Credentials.from_secret(self.my_secret),
             vpc=target_vpc,
             allocated_storage=100,
             allow_major_version_upgrade=False,
@@ -81,7 +81,7 @@ class PuppersRdsStack(Stack):
             "SecretRotation",
             application=sm.SecretRotationApplication.POSTGRES_ROTATION_SINGLE_USER,
             # Postgres single user scheme
-            secret=my_secret,
+            secret=self.my_secret,
             target=instance1,  # a Connectable
             vpc=target_vpc,  # The VPC for secret rotation
             exclude_characters=" %+:;\{\}'\"\,@\\",
