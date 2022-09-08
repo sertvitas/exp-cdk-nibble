@@ -33,7 +33,7 @@ class PuppersEc2(Stack):
             "InstanceSSM",
             assumed_by=iam.ServicePrincipal("ec2.amazonaws.com"),
         )
-        # add the SSM policy so we cna manage the instance with SSM
+        # add the SSM policy so we can manage the instance with SSM
         role.add_managed_policy(
             iam.ManagedPolicy.from_aws_managed_policy_name(
                 "AmazonSSMManagedInstanceCore"
@@ -60,7 +60,7 @@ class PuppersEc2(Stack):
         role.add_to_policy(
             iam.PolicyStatement(resources=["*"], actions=["secretsmanager:ListSecrets"])
         )
-        # permit EC2 isntance to downlaod teh  commit builds of pupers from S3
+        # permit EC2 instance to download the commit builds of puppers from S3
         role.add_to_policy(
             iam.PolicyStatement(resources=["*"], actions=["s3:ListAllMyBuckets"])
         )
