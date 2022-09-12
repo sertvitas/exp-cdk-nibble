@@ -47,6 +47,12 @@ class PuppersEc2(Stack):
                 "CloudWatchAgentServerPolicy"
             )
         )
+        # Permit the instance to access docker repository Required for puppers
+        role.add_managed_policy(
+            iam.ManagedPolicy.from_aws_managed_policy_name(
+                "AmazonEC2ContainerRegistryReadOnly"
+            )
+        )
         # permit puppers to access the RDS secret
         role.add_to_policy(
             iam.PolicyStatement(
