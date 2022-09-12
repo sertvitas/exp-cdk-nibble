@@ -50,7 +50,7 @@ class PuppersRdsStack(Stack):
                 "shared_preload_libraries": "pg_stat_statements",
             },
         )
-        instance1 = rds.DatabaseInstance(
+        self.instance1 = rds.DatabaseInstance(
             self,
             "PostgresInstance1",
             engine=engine,
@@ -83,7 +83,7 @@ class PuppersRdsStack(Stack):
             application=sm.SecretRotationApplication.POSTGRES_ROTATION_SINGLE_USER,
             # Postgres single user scheme
             secret=self.my_secret,
-            target=instance1,  # a Connectable
+            target=self.instance1,  # a Connectable
             vpc=target_vpc,  # The VPC for secret rotation
             exclude_characters=" %+:;\{\}'\"\,@\\",
         )

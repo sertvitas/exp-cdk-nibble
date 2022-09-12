@@ -4,6 +4,7 @@ from aws_cdk import (
     aws_ec2 as ec2,
     aws_ecs as ecs,
     aws_iam as iam,
+    aws_rds as rds,
     aws_secretsmanager as sm,
 )
 from constructs import Construct
@@ -19,6 +20,7 @@ class PuppersEc2(Stack):
         construct_id: str,
         target_vpc,
         secret: sm.Secret,
+        rds_instance: rds.DatabaseInstance,
         **kwargs
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
@@ -93,3 +95,4 @@ class PuppersEc2(Stack):
             role=role,
             user_data=ec2.UserData.custom(user_data),
         )
+        self.instance.connections.allow_to_default_port(rds_instance)
