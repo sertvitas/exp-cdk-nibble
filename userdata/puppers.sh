@@ -20,12 +20,12 @@ useradd -m -d /opt/puppers -s /bin/bash puppers
 usermod  -L puppers
 
 touch /tmp/puppers.txt
-curl -Lo /opt/puppers_0.0.6_linux_amd64.tar.gz \
-https://github.com/natemarks/puppers/releases/download/v0.0.6/puppers_0.0.6_linux_amd64.tar.gz
+curl -Lo /opt/puppers_0.0.10_linux_amd64.tar.gz \
+https://github.com/natemarks/puppers/releases/download/v0.0.10/puppers_0.0.10_linux_amd64.tar.gz
 
 mkdir -p /opt/puppers
 
-tar -xzvf /opt/puppers_0.0.6_linux_amd64.tar.gz -C /opt/puppers
+tar -xzvf /opt/puppers_0.0.10_linux_amd64.tar.gz -C /opt/puppers
 
 chown -R puppers:puppers /opt/puppers
 
