@@ -37,5 +37,5 @@ tar -xzvf /opt/puppers_0.0.10_linux_amd64.tar.gz -C /opt/puppers
 
 chown -R puppers:puppers /opt/puppers
 
-runuser -l puppers -c "AWS_REGION=us-east-1 PUPPERS_SECRET_NAME=SecretA720EF05-YA1uGeVL9JKx nohup /opt/puppers/puppers &"
+runuser -l puppers -c "AWS_REGION=us-east-1 PUPPERS_SECRET_NAME=SecretA720EF05-FinS3OAyRqRj nohup /opt/puppers/puppers &"
 
