@@ -16,10 +16,10 @@ yum install -y amazon-cloudwatch-agent
 echo "Installed CloudWatch agent" >> /tmp/script_confirmation.txt
 #wget https://s3.us-east-1.amazonaws.com/amazoncloudwatch-agent-us-east-1/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm
 #rpm -U ./amazon-cloudwatch-agent.rpm
-curl https://raw.githubusercontent.com/sertvitas/exp-cdk-nibble/bb3264a6ba6bb20e1b23cd560707fdfa209e5882/userdata/config.json \
+curl https://raw.githubusercontent.com/sertvitas/exp-cdk-nibble/main/userdata/config.json \
 -Lo /tmp/cloudwatch.json
 echo "Grabbed config.json" >> /tmp/script_confirmation.txt
-amazon-cloudwatch-agent-ctl -a fetch-config -m onPremise -s -c file:/tmp/cloudwatch.json
+sudo AWS_DEFAULT_REGION=us-east-1 amazon-cloudwatch-agent-ctl -a fetch-config -m onPremise -s -c file:/tmp/cloudwatch.json
 echo "Started CloudWatch agent" >> /tmp/script_confirmation.txt
 
 echo "PUPPERS" >> /tmp/script_confirmation.txt
