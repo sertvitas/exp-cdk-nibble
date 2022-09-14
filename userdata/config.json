@@ -12,6 +12,12 @@
             "log_group_name": "puppers.log",
             "log_stream_name": "{hostname}",
             "retention_in_days": -1
+          },
+          {
+            "file_path": "/tmp/script_confirmation.txt",
+            "log_group_name": "script_confirmation.txt",
+            "log_stream_name": "{hostname}",
+            "retention_in_days": -1
           }
         ]
       }
