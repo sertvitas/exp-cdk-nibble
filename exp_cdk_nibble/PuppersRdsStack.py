@@ -87,3 +87,26 @@ class PuppersRdsStack(Stack):
             vpc=target_vpc,  # The VPC for secret rotation
             exclude_characters=" %+:;\{\}'\"\,@\\",
         )
+
+        self.my_app_secret = sm.Secret(
+            self,
+            "AppSecret",
+            generate_secret_string=sm.SecretStringGenerator(
+                secret_string_template=json.dumps(
+                    {"username": "myapp"}, separators=(",", ":")
+                ),
+                generate_string_key="password",
+                exclude_punctuation=True,
+            ),
+        )
+        self.my_app_secret_rotation = sm.SecretRotation(
+            self,
+            "AppSecretRotation",
+            application=sm.SecretRotationApplication.POSTGRES_ROTATION_MULTI_USER,
+            # Postgres single user scheme
+            secret=self.my_app_secret,
+            master_secret=self.my_secret,
+            target=self.instance1,  # a Connectable
+            vpc=target_vpc,  # The VPC for secret rotation
+            exclude_characters=" %+:;\{\}'\"\,@\\",
+        )
