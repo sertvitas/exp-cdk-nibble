@@ -98,8 +98,9 @@ class PuppersRdsStack(Stack):
                         "dbInstanceIdentifier": self.instance1.instance_identifier,
                         "engine": "postgres",
                         "host": self.instance1.db_instance_endpoint_address,
-                        "port": self.instance1.db_instance_endpoint_port
-                        }, separators=(",", ":")
+                        "port": self.instance1.db_instance_endpoint_port,
+                    },
+                    separators=(",", ":"),
                 ),
                 generate_string_key="password",
                 exclude_punctuation=True,
